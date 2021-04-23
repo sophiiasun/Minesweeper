@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Minesweeper</title>
+	<style>
+		body {
+			min-height: 100vh;
+			width: 100vw;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin: 0;
+			background-color: black; 
+		}
+
+		#game-board {
+			background-color: #767676;
+			width: 100vmin;
+			height: 100vmin;
+			display: grid;
+			grid-template-rows: repeat(30, 1fr);
+			grid-template-columns: repeat(30, 1fr);
+			grid-gap: 1px;
+		}
+
+		.tile {
+			background-color: #bfbebe;
+			font-size: 2vmin;
+			font-family: arial;
+			text-align: center;
+			padding-top: 0.5vmin;
+		}
+
+		.grid-container > div {
+			text-align: center;
+			background-color: #CCC;
+		}
+
+		.button {
+			background-color: #e7e7e7;
+			border: solid;
+			font: sans-serif;
+			border-width: thin;
+			text-align: center;
+			display: inline-block;
+			cursor: pointer;
+			padding: 0px;
+			font-size: 2vmin;
+		}
+
+		.button > [dataset-status='hidden'] {
+			background-color: ##FF0000;
+			cursor: not-allowed;
+			pointer-events: none;
+		}
+
+		.button > [dataset-status='marked'] {
+			background-color: #d3d3d3;
+		}
+
+	</style>
+</head>
+<body>
+	<p>
+	<div id="game-board"></div>
+	</p>
+</body>
+<script src="script.js"></script>
+</html>
