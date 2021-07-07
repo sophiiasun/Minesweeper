@@ -20,10 +20,21 @@ function main(currentTime) {
 
 // CLICKS
 
-var singleLeft = function(e) { alert('single left') }
-var singleRight = function(e) { alert('single right') }
-var doubleLeft = function(e) { alert('double left') }
-var doubleRight = function(e) { alert('double right') }
+function singleLeft(tile) {
+	checkClick(tile)
+}
+
+function doubleLeft(tile) {
+	// ask ansh
+}
+
+function singleRight(tile) {
+	markTile_3(tile)
+}
+
+function doubleRight(tile) {
+	markTile_2(tile)
+}
 
 gameboard.forEach(row => {
     row.forEach(tile => {
@@ -32,13 +43,13 @@ gameboard.forEach(row => {
             switch (e.which) {
                 case 1: 
                     clicks++;
-                    if (clicks == 1) timeout = setTimeout(function () { alert('SL'); clicks = 0; }, 250);
-                    else { clearTimeout(timeout); alert('DL'); clicks = 0; }
+                    if (clicks == 1) timeout = setTimeout(function () { singleLeft(tile); clicks = 0; }, 250);
+                    else { clearTimeout(timeout); doubleLeft(tile); clicks = 0; }
                     break
                 case 3:
                     clicks++;
-                    if (clicks == 1) timeout = setTimeout(function () { alert('SR'); clicks = 0; }, 250);
-                    else { clearTimeout(timeout); alert('DR'); clicks = 0; }
+                    if (clicks == 1) timeout = setTimeout(function () { singleRight(tile); clicks = 0; }, 250);
+                    else { clearTimeout(timeout); doubleRight(tile); clicks = 0; }
                     break
             }
         }, false);
@@ -163,20 +174,20 @@ function markTile_2(tile) {
 
 function markTile_3(tile) {
 	const button = tile.buttonElement
-	button.innerHTML = '/'
+	button.innerHTML = 'X'
 }
 
 // CHECK WIN OR LOSE
 
 function displayLose(tile) {
 	setTimeout(function(){ 
-		if (confirm("You Lost! Press 'OK' or refresh the page to restart.")) {
-			location.reload()
-		}
+		if (confirm("You Lost! Press 'OK' or refresh the page to restart.")) location.reload()
+		else disableBoard()
 	}, 500);
 }
 
 function displayWin() {
+	disableBoard()
 	setTimeout(function(){ 
 		if (confirm("You Won! Press 'OK' or refresh the page to restart.")) {
 			location.reload()
@@ -189,12 +200,25 @@ function checkWin() {
 		displayWin()
 }
 
-
 function revealMines(tile) {
 	MINE_POSITIONS.forEach(pos => {
 		gameboard[pos[0]][pos[1]].buttonElement.innerHTML = 'X'
 		gameboard[pos[0]][pos[1]].buttonElement.style.background = "#ffa5a1"
 	})
 	tile.buttonElement.style.background = "red"
+}
+
+function disableBoard() {
+	gameboard.forEach(row => {
+		row.forEach(tile => {
+			if (tile.status === 'button') {
+				oldButton = tile.buttonElement
+				newButton = document.createElement("button")
+				newButton.classList.add('button')
+				newButton.style.border = "outset"
+				oldButton.parentNode.replaceChild(newButton, oldButton);
+			}
+		})
+	})
 }
 
