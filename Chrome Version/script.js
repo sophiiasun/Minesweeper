@@ -20,24 +20,31 @@ function main(currentTime) {
 
 // CLICKS
 
-gameboard.forEach(row => {
-	row.forEach(tile => {
-		tile.buttonElement.addEventListener('mousedown', e => {
-			if (tile.clickable == false)
-				return
-			switch (event.which) {
-				case 1:
-					checkClick(tile)
-					break
-				case 3: 
-					markTile(tile)
-					break
-			}
-		})
-		boardElement.appendChild(tile.buttonElement)
-	})	
-})
+var singleLeft = function(e) { alert('single left') }
+var singleRight = function(e) { alert('single right') }
+var doubleLeft = function(e) { alert('double left') }
+var doubleRight = function(e) { alert('double right') }
 
+gameboard.forEach(row => {
+    row.forEach(tile => {
+		var clicks = 0, timeout;
+        tile.buttonElement.addEventListener('mousedown', e => {
+            switch (e.which) {
+                case 1: 
+                    clicks++;
+                    if (clicks == 1) timeout = setTimeout(function () { alert('SL'); clicks = 0; }, 250);
+                    else { clearTimeout(timeout); alert('DL'); clicks = 0; }
+                    break
+                case 3:
+                    clicks++;
+                    if (clicks == 1) timeout = setTimeout(function () { alert('SR'); clicks = 0; }, 250);
+                    else { clearTimeout(timeout); alert('DR'); clicks = 0; }
+                    break
+            }
+        }, false);
+        boardElement.appendChild(tile.buttonElement)
+    })    
+})
 // GRID
 
 function createGrid() {
@@ -140,11 +147,23 @@ function revealBlanks(tile) {
 
 // MARK TILE (right click)
 
-function markTile(tile) {
+function markTile_1(tile) {
+	const button = tile.buttonElement
+	// if (button.style.background =)
+	buttons.innerHTML = '<img src="https://i.ibb.co/WnQZMs7/bomb.png">'
+	if (tile.type == -1) minesFound++
+}
+
+// MARK TILE (double right click)
+
+function markTile_2(tile) {
 	const button = tile.buttonElement
 	button.innerHTML = "?"
-	if (tile.type == -1)
-		minesFound++
+}
+
+function markTile_3(tile) {
+	const button = tile.buttonElement
+	button.innerHTML = '/'
 }
 
 // CHECK WIN OR LOSE
@@ -152,7 +171,7 @@ function markTile(tile) {
 function displayLose(tile) {
 	setTimeout(function(){ 
 		if (confirm("You Lost! Press 'OK' or refresh the page to restart.")) {
-			window.location = 'file:///Users/sophiasun/Documents/GitHub/Personal-Projects/Minesweeper/Minesweeper3.html'
+			location.reload()
 		}
 	}, 500);
 }
@@ -160,7 +179,7 @@ function displayLose(tile) {
 function displayWin() {
 	setTimeout(function(){ 
 		if (confirm("You Won! Press 'OK' or refresh the page to restart.")) {
-			window.location = 'file:///Users/sophiasun/Documents/GitHub/Personal-Projects/Minesweeper/Minesweeper3.html'
+			location.reload()
 		}
 	}, 500);
 }
