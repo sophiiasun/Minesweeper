@@ -25,15 +25,15 @@ function singleLeft(tile) {
 }
 
 function doubleLeft(tile) {
-	// ask ansh
+	doubleClick(tile)
 }
 
 function singleRight(tile) {
-	markTile_3(tile)
+	markTile_2(tile)
 }
 
 function doubleRight(tile) {
-	markTile_2(tile)
+	markTile_1(tile)
 }
 
 gameboard.forEach(row => {
@@ -63,13 +63,13 @@ function createGrid() {
     	let row = []
     	for (var c = 0; c < GRID_SIZE; c++) {
     		const buttonElement = document.createElement("button")
-    		var type = 0, clickable = true, status = "button"
+    		var type = 0, clickable = true, status = "button", flagged = false
     		buttonElement.classList.add('button')
     		buttonElement.style.border = "outset"
     		buttonElement.id = r+"-"+c
     		buttonElement.gridRowStart = r
     		buttonElement.gridColumnStart = c
-    		const tile = { buttonElement, r, c, type, clickable, status } 
+    		const tile = { buttonElement, r, c, type, clickable, status, flagged } 
     		row.push(tile)
     	}
     	gameboard.push(row)
@@ -156,25 +156,34 @@ function revealBlanks(tile) {
 	}
 }
 
+function countFlagged(r, c) {
+	var counter = 0
+	STRAIGHT_DIRECTION.forEach(dir => {
+		const row = r + dir[0]
+		const col = c + dir[1]
+		if (validPosition(row, col) && gameboard[row][col].status === "button" && gameboard[row][col].flagged == true) 
+			counter++
+	})
+	return counter
+}
+
+function doubleClick(tile) {
+
+}
+
 // MARK TILE (right click)
 
 function markTile_1(tile) {
 	const button = tile.buttonElement
-	// if (button.style.background =)
-	buttons.innerHTML = '<img src="https://i.ibb.co/WnQZMs7/bomb.png">'
-	if (tile.type == -1) minesFound++
+	if (button.innerHTML === '?') button.innerHTML = ''
+	else button.innerHTML = '?'
 }
-
-// MARK TILE (double right click)
 
 function markTile_2(tile) {
 	const button = tile.buttonElement
-	button.innerHTML = "?"
-}
-
-function markTile_3(tile) {
-	const button = tile.buttonElement
-	button.innerHTML = 'X'
+	if (button.innerHTML === 'X') button.innerHTML = ''
+	else button.innerHTML = 'X'
+	tile.flagged = true
 }
 
 // CHECK WIN OR LOSE
